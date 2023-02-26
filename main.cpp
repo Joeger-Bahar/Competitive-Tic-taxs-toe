@@ -245,4 +245,4 @@ int main()
 		player = togglePlayer(player);
 		playerMark = togglePlayerMark(player);
 	}
-}
+} 
