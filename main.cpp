@@ -11,9 +11,9 @@
 char playerMark = 'X';
 short player = 1;
 
-char board[3][3] = 
+char board[3][3] =
 {
-  {'-', '-', '-'},
+        {'-', '-', '-'},
 	{'-', '-', '-'},
 	{'-', '-', '-'}
 };
