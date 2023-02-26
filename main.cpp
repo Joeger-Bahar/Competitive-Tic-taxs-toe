@@ -221,7 +221,7 @@ void wonGame(short player)
 
 int main()
 {
-	while (true) {
+  while (true) {
 		printBoard();
 		std::string playerSpot;
 		std::printf("\n Player %i, choose a spot: ", player);
