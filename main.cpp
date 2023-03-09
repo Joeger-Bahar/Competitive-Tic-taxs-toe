@@ -74,12 +74,9 @@ char togglePlayerMark(short player)
 		return 'O';
 }
 
-short togglePlayer(short player)
+void togglePlayer(short& player)
 {
-	if (player == 1)
-		return 2;
-	else
-		return 1;
+	player = (player % 2) ? 1 : 2;
 }
 
 bool spotOpen(std::string spot) 
@@ -242,7 +239,7 @@ int main()
 			wonGame(player);
 			return 0;
 		}
-		player = togglePlayer(player);
+		togglePlayer(player);
 		playerMark = togglePlayerMark(player);
 	}
 } 
