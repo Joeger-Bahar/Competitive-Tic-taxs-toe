@@ -68,10 +68,7 @@ void replaceSpot(std::string spot)
 
 char togglePlayerMark(short player) 
 {
-	if (player == 1)
-		return 'X';
-	else
-		return 'O';
+	return (player == 1) ? 'X' : 'O';
 }
 
 void togglePlayer(short& player)
