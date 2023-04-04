@@ -11,7 +11,7 @@ short player = 1;
 
 char board[3][3] = {
 	// The board that's printed out
-  {'-', '-', '-'},
+        {'-', '-', '-'},
 	{'-', '-', '-'},
 	{'-', '-', '-'}
 };
