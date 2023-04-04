@@ -1,12 +1,9 @@
 // Neccesary imports.
 #include <iostream>
-#include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <map>
 #include <string>
 #include <set>
-#define LOG(x) std::cout << x;
 
 // The player and player mark
 char playerMark = 'X';
@@ -44,24 +41,13 @@ void Capitalize(std::string& str) {
 	}
 }
 
-void printSpots() {
-	// Prints map spots for testing
-	for (const auto key : spots) {
-		LOG(key.first);
-		LOG(", ");
-		LOG(char(key.second));
-		LOG("\n");
+void print_board(const char (&board)[3][3]) {
+	std::printf("     A   B   C\n");
+    for (int i = 0; i < 8; i += 3) {
+        printf("%i    %c | %c | %c\n", (i / 3), (*board)[i], (*board)[i+1], (*board)[i+2]);
+        if (i < 5)
+            printf("    -----------\n");
 	}
-}
-
-void printBoard() {
-	// Prints the board for the player
-	std::printf("   A   B   C\n");
-	std::printf("1  %c | %c | %c\n", board[0][0], board[0][1], board[0][2]);
-	std::printf("  -----------\n");
-	std::printf("2  %c | %c | %c\n", board[1][0], board[1][1], board[1][2]);
-	std::printf("  -----------\n");
-	std::printf("3  %c | %c | %c\n", board[2][0], board[2][1], board[2][2]);
 }
 
 void updateBoard() {
@@ -139,13 +125,12 @@ bool diagonalWin() {
 	}
 	return 0;
 }
-bool win() {
-  if (diagonalWin() || verticalWin() || horizontalWin())
-    return 1;
+inline bool win() {
+  if (diagonalWin() || verticalWin() || horizontalWin() {return 1};
 	return 0;
 }
 
-void wonGame(short player) {
+inline void wonGame(const short player) {
 	printBoard();
 	std::printf("Good Job Player %i, You Won!", player);
 }
