@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <map>
-#include <vector>
 #include <string>
 #include <set>
 #define LOG(x) std::cout << x;
@@ -15,7 +14,7 @@ short player = 1;
 
 char board[3][3] = {
 	// The board that's printed out
-        {'-', '-', '-'},
+  {'-', '-', '-'},
 	{'-', '-', '-'},
 	{'-', '-', '-'}
 };
@@ -38,12 +37,11 @@ void clearScreen() {
 	std::cout << "\033[2J\033[1;1H";
 }
 
-std::string Capitalize(std::string str) {
+void Capitalize(std::string& str) {
 	// Capitalizes all of the letters in a string.
 	for (char& letter : str) {
 		letter = toupper(letter);
 	}
-	return str;
 }
 
 void printSpots() {
@@ -54,35 +52,6 @@ void printSpots() {
 		LOG(char(key.second));
 		LOG("\n");
 	}
-}
-
-void replaceSpot(std::string spot) {
-	// Replaces the spot on the board with the players input
-	for (auto &key : spots) {
-		if (key.first == spot) {
-			key.second = playerMark;
-		}
-	}
-}
-
-char togglePlayerMark(short player) {
-	// Toggles player mark between X and O
-	return (player == 1) ? 'X' : 'O';
-}
-
-void togglePlayer(short& player) {
-	// Toggles player between 1 and 2
-	player = (player % 2) ? 1 : 2;
-}
-
-bool spotOpen(std::string spot) {
-	// Checks if a spot is open on the board
-	for (const auto key : spots) {
-		if (spot == key.first) {
-			return true;
-		}
-	}
-	return false;
 }
 
 void printBoard() {
@@ -108,7 +77,7 @@ void updateBoard() {
 	board[2][2] = spots.at("C3");
 }
 
-char horizontalWin() {
+bool horizontalWin() {
 	// Checks board for horizontal wins
 	std::set<char> row;
 	for (int i = 0; i < 3; i++) {
@@ -119,16 +88,15 @@ char horizontalWin() {
 		if (row.size() == 1) {
 			for (char item : row) {
 				if (item != '-') {
-					return item;
+					return 1;
 				}
 			}
 		}
 	}
-	return '-';
+	return 0;
 }
 
-char verticalWin()
-{
+bool verticalWin() {
 	// Checks the board for wins vertically
 	std::set<char> column;
 	for (int i = 0; i < 3; i++) {
@@ -139,15 +107,15 @@ char verticalWin()
 		if (column.size() == 1) {
 			for (char mark : column) {
 				if (mark != '-') {
-					return mark;
+					return 1;
 				}
 			}
 		}
 	}
-	return '-';
+	return 0;
 }
 
-char diagonalWin() {
+bool diagonalWin() {
 	// Checks board for wins diagonally
 	std::set<char> diagonal;
 	for (int i = 0; i < 3; i++) {
@@ -156,7 +124,7 @@ char diagonalWin() {
 	if (diagonal.size() == 1) {
 		for (char mark : diagonal) {
 			if (mark != '-')
-				return mark;
+				return 1;
 		}
 	}
 	diagonal.clear();
@@ -166,27 +134,15 @@ char diagonalWin() {
 	if (diagonal.size() == 1) {
 		for (char mark : diagonal) {
 			if (mark != '-')
-				return mark;
+				return 1;
 		}
 	}
-	return '-';
+	return 0;
 }
-char win() {
-	char winMark;
-	winMark = horizontalWin();
-	if (winMark != '-') {
-		return winMark;
-	}
-	winMark = verticalWin();
-	if (winMark != '-') {
-		return winMark;
-	}
-	winMark = diagonalWin();
-	if (winMark != '-') {
-		return winMark;
-	}
-	
-	return '-';
+bool win() {
+  if (diagonalWin() || verticalWin() || horizontalWin())
+    return 1;
+	return 0;
 }
 
 void wonGame(short player) {
@@ -196,26 +152,27 @@ void wonGame(short player) {
 
 int main()
 {
-  while (true) {
+	std::string playerSpot;
+  clearScreen();
+  while (1) {
 		printBoard();
-		std::string playerSpot;
 		std::printf("\n Player %i, choose a spot: ", player);
 		std::cin >> playerSpot;
-		playerSpot = Capitalize(playerSpot);
-		while (!spotOpen(playerSpot)) {
+		Capitalize(playerSpot);
+		while (!spots[playerSpot]) {
 			std::printf("\n Not a valid spot. Please enter valid spot: ");
 			std::cin >> playerSpot;
-			playerSpot = Capitalize(playerSpot);
+			Capitalize(playerSpot);
 		}
 		
-		replaceSpot(playerSpot);
+		spots[playerSpot] = playerMark;
 		updateBoard();
 		clearScreen();
-		if (win() != '-') {
+		if (win()) {
 			wonGame(player);
 			return 0;
 		}
-		togglePlayer(player);
-		playerMark = togglePlayerMark(player);
+	  player = (player == 2) ? 1 : 2;
+		playerMark = (player == 1) ? 'X' : 'O';
 	}
 } 
