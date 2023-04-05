@@ -11,7 +11,7 @@ short player = 1;
 
 char board[3][3] = {
 	// The board that's printed out
-  {'-', '-', '-'},
+  	{'-', '-', '-'},
 	{'-', '-', '-'},
 	{'-', '-', '-'}
 };
@@ -43,10 +43,10 @@ void Capitalize(std::string& str) {
 
 void printBoard(const char (&board)[3][3]) {
 	std::printf("    A   B   C\n");
-    for (int i = 0; i < 8; i += 3) {
-        printf("%i   %c | %c | %c\n", (i / 3 + 1), (*board)[i], (*board)[i+1], (*board)[i+2]);
-        if (i < 5)
-            printf("   -----------\n");
+    	for (int i = 0; i < 8; i += 3) {
+        	printf("%i   %c | %c | %c\n", (i / 3 + 1), (*board)[i], (*board)[i+1], (*board)[i+2]);
+        	if (i < 5)
+            	printf("   -----------\n");
 	}
 }
 
@@ -67,14 +67,14 @@ bool horizontalWin(const char type) {
 	for (int i = 0; i < 3; i++) {
 		row.clear();
 		for (int j = 0; j < 3; j++) {
-      x = type == 'h' ? i : j;
-      y = type == 'h' ? j : i;
+      			x = type == 'h' ? i : j;
+      			y = type == 'h' ? j : i;
 			row.insert(board[x][y]);
 		}
 		if (row.size() == 1) {
-      if (*row.begin() != '-') {
-        return 1;
-      }
+      			if (*row.begin() != '-') {
+        			return 1;
+      			}
 		}
 	}
 	return 0;
@@ -88,22 +88,22 @@ bool diagonalWin() {
 	}
 	if (diagonal.size() == 1) {
 		if (*diagonal.begin() != '-') {
-      return 1;
-    }
-  }
+      			return 1;
+    		}
+  	}
 	diagonal.clear();
 	for (int i = 0; i < 3; i++) {
 		diagonal.insert(board[i][2 - i]);
 	}
 	if (diagonal.size() == 1) {
 		if (*diagonal.begin() != '-') {
-      return 1;
-    }
+      			return 1;
+    		}
 	}
 	return 0;
 }
 inline bool win() {
-  if (diagonalWin() || horizontalWin('v') || horizontalWin('h')) {return 1;}
+	if (diagonalWin() || horizontalWin('v') || horizontalWin('h')) {return 1;}
 	return 0;
 }
 
@@ -115,11 +115,11 @@ inline void wonGame(const short player) {
 int main()
 {
 	std::string playerSpot;
-  auto input = [&](const char* statement) {std::printf(statement, player); std::cin >> playerSpot;Capitalize(playerSpot);};
-  clearScreen();
-  while (1) {
+  	auto input = [&](const char* statement) {std::printf(statement, player); std::cin >> playerSpot;Capitalize(playerSpot);};
+  	clearScreen();
+  	while (1) {
 		printBoard(board);
-    input("\nPlayer %i, choose a spot: ");
+    		input("\nPlayer %i, choose a spot: ");
 		while (!spots[playerSpot]) {
 			input("\nNot a valid spot. Please enter valid spot: ");
 		}
@@ -131,7 +131,7 @@ int main()
 			wonGame(player);
 			return 0;
 		}
-	  player = (player == 2) ? 1 : 2;
+	  	player = (player == 2) ? 1 : 2;
 		playerMark = (player == 1) ? 'X' : 'O';
 	}
 } 
