@@ -1,4 +1,4 @@
-// Neccesary imports.
+// Neccesary imports. 22 lines of whitespace
 #include <iostream>
 #include <stdio.h>
 #include <map>
@@ -11,7 +11,7 @@ short player = 1;
 
 char board[3][3] = {
 	// The board that's printed out
-        {'-', '-', '-'},
+  {'-', '-', '-'},
 	{'-', '-', '-'},
 	{'-', '-', '-'}
 };
@@ -41,61 +41,40 @@ void Capitalize(std::string& str) {
 	}
 }
 
-void print_board(const char (&board)[3][3]) {
-	std::printf("     A   B   C\n");
+void printBoard(const char (&board)[3][3]) {
+	std::printf("    A   B   C\n");
     for (int i = 0; i < 8; i += 3) {
-        printf("%i    %c | %c | %c\n", (i / 3), (*board)[i], (*board)[i+1], (*board)[i+2]);
+        printf("%i   %c | %c | %c\n", (i / 3 + 1), (*board)[i], (*board)[i+1], (*board)[i+2]);
         if (i < 5)
-            printf("    -----------\n");
+            printf("   -----------\n");
 	}
 }
 
 void updateBoard() {
 	// Updates all the board spots, so it prints correctly
-	board[0][0] = spots.at("A1");
-	board[1][0] = spots.at("A2");
-	board[2][0] = spots.at("A3");
-	board[0][1] = spots.at("B1");
-	board[1][1] = spots.at("B2");
-	board[2][1] = spots.at("B3");
-	board[0][2] = spots.at("C1");
-	board[1][2] = spots.at("C2");
-	board[2][2] = spots.at("C3");
+  const char columnLetters[] = {'A', 'B', 'C'};
+  for (int row = 0; row < 3; row++) {
+    for (int col = 0; col < 3; col++) {
+      board[row][col] = spots[columnLetters[col] + std::to_string(row + 1)];
+    }
+  }
 }
 
-bool horizontalWin() {
+bool horizontalWin(const char type) {
+  int x, y;
 	// Checks board for horizontal wins
 	std::set<char> row;
 	for (int i = 0; i < 3; i++) {
 		row.clear();
 		for (int j = 0; j < 3; j++) {
-			row.insert(board[i][j]);
+      x = type == 'h' ? i : j;
+      y = type == 'h' ? j : i;
+			row.insert(board[x][y]);
 		}
 		if (row.size() == 1) {
-			for (char item : row) {
-				if (item != '-') {
-					return 1;
-				}
-			}
-		}
-	}
-	return 0;
-}
-
-bool verticalWin() {
-	// Checks the board for wins vertically
-	std::set<char> column;
-	for (int i = 0; i < 3; i++) {
-		column.clear();
-		for (int j = 0; j < 3; j++) {
-			column.insert(board[j][i]);
-		}
-		if (column.size() == 1) {
-			for (char mark : column) {
-				if (mark != '-') {
-					return 1;
-				}
-			}
+      if (*row.begin() != '-') {
+        return 1;
+      }
 		}
 	}
 	return 0;
@@ -108,46 +87,41 @@ bool diagonalWin() {
 		diagonal.insert(board[i][i]);
 	}
 	if (diagonal.size() == 1) {
-		for (char mark : diagonal) {
-			if (mark != '-')
-				return 1;
-		}
-	}
+		if (*diagonal.begin() != '-') {
+      return 1;
+    }
+  }
 	diagonal.clear();
 	for (int i = 0; i < 3; i++) {
 		diagonal.insert(board[i][2 - i]);
 	}
 	if (diagonal.size() == 1) {
-		for (char mark : diagonal) {
-			if (mark != '-')
-				return 1;
-		}
+		if (*diagonal.begin() != '-') {
+      return 1;
+    }
 	}
 	return 0;
 }
 inline bool win() {
-  if (diagonalWin() || verticalWin() || horizontalWin() {return 1};
+  if (diagonalWin() || horizontalWin('v') || horizontalWin('h')) {return 1;}
 	return 0;
 }
 
 inline void wonGame(const short player) {
-	printBoard();
-	std::printf("Good Job Player %i, You Won!", player);
+	printBoard(board);
+	std::printf("\nGood Job Player %i, You Won!\n", player);
 }
 
 int main()
 {
 	std::string playerSpot;
+  auto input = [&](const char* statement) {std::printf(statement, player); std::cin >> playerSpot;Capitalize(playerSpot);};
   clearScreen();
   while (1) {
-		printBoard();
-		std::printf("\n Player %i, choose a spot: ", player);
-		std::cin >> playerSpot;
-		Capitalize(playerSpot);
+		printBoard(board);
+    input("\nPlayer %i, choose a spot: ");
 		while (!spots[playerSpot]) {
-			std::printf("\n Not a valid spot. Please enter valid spot: ");
-			std::cin >> playerSpot;
-			Capitalize(playerSpot);
+			input("\nNot a valid spot. Please enter valid spot: ");
 		}
 		
 		spots[playerSpot] = playerMark;
